@@ -11,14 +11,26 @@ export class OpenApiService {
         const options = new DocumentBuilder()
             .setTitle(module.options.title)
             .setDescription(module.options.description)
-            .setVersion(module.options.version)
-            .addTag(module.options.tag)
-            .build();
+            .setVersion(module.options.version);
 
-        const catDocument = SwaggerModule.createDocument(app, options, {
+        if ( module.options.tags.constructor === Array ) {
+            module.options.tags.forEach(tag => options.addTag(tag));
+        }
+
+        if ( module.options.tags.constructor === Object ) {
+            for (const key in module.options.tags) {
+                if (module.options.tags.hasOwnProperty(key)) {
+                    options.addTag(module.options.tags[key]);
+                }
+            }
+        }
+
+        const buildedOptions = options.build();
+
+        const document = SwaggerModule.createDocument(app, buildedOptions, {
             include: module.constructors,
         });
-        SwaggerModule.setup(module.path, app, catDocument);
+        SwaggerModule.setup(module.path, app, document);
 
         l.debug(`open api '${module.path}' loaded`);
     }
