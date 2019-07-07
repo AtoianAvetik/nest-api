@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, Generated } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Generated, CreateDateColumn } from 'typeorm';
 
 @Entity({
     name: 'users',
@@ -25,4 +25,7 @@ export class User {
 
     @Column({nullable: true})
     supplier?: number;
+
+    @CreateDateColumn()
+    createdAt: Date;
 }

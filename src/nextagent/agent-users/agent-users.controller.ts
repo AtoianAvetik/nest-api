@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { AgentUsersService } from './agent-users.service';
 import { ApiUseTags, ApiResponse } from '@nestjs/swagger';
 import { AgentUserCreateDto, AgentUserListDto, AgentUserViewDto } from './dto';
@@ -28,5 +28,20 @@ export class AgentUsersController {
     @Get(':id')
     getById(@Param('id') id: number): Promise<AgentUserViewModel> {
         return this.agentUsersService.getById(id);
+    }
+
+    @ApiResponse({status: 200, description: 'Agent user updated', type: AgentUserViewDto})
+    @ApiResponse({status: 400, description: 'Validation failed'})
+    @ApiResponse({status: 404, description: 'Agent not found'})
+    @Put(':id')
+    updateAgentUser(@Param('id') id: number, @Body() agentUser: AgentUserCreateDto): Promise<AgentUserViewModel> {
+        return this.agentUsersService.updateAgentUser(id, agentUser);
+    }
+
+    @ApiResponse({status: 204, description: 'Agent user deleted'})
+    @ApiResponse({status: 404, description: 'Agent not found'})
+    @Delete(':id')
+    deleteAgentUser(@Param('id') id: number): Promise<any> {
+        return this.agentUsersService.deleteAgentUser(id);
     }
 }

@@ -17,6 +17,7 @@ export class AgentListModel extends AgentModel {
 
     constructor(data) {
         super(data);
+        this.agentUsers = data.agentUsers || [];
     }
 }
 
@@ -38,6 +39,7 @@ export class AgentViewModel extends AgentListModel {
         this.logoImageThumbnailUrl = data.logoImageThumbnailUrl;
         this.primaryColor = data.primaryColor;
         this.secondaryColor = data.secondaryColor;
-        this.createdAt = new Date();
+        this.agentSuppliers = data.agentSuppliers || [];
+        this.createdAt = data.createdAt;
     }
 }

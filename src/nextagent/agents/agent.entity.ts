@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, Generated } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Generated, CreateDateColumn } from 'typeorm';
 
 @Entity({
     name: 'agents',
@@ -37,4 +37,7 @@ export class Agent {
 
     @Column({type: 'simple-array', nullable: true})
     agentUsers: number[];
+
+    @CreateDateColumn()
+    createdAt: Date;
 }

@@ -17,6 +17,6 @@ export class UserViewModel extends UserModel {
 
     constructor(data) {
         super(data);
-        this.createdAt = new Date();
+        this.createdAt = data.createdAt;
     }
 }
