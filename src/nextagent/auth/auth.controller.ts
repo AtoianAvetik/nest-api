@@ -2,8 +2,8 @@ import { Body, Controller, Headers, Post } from '@nestjs/common';
 import { ApiUseTags, ApiResponse } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto, LoginExceptionDto, LoginResponseDto } from './dto';
-import { UserBOCreateDto } from '../users-bo/dto';
 import { TAGS } from '../types';
+import { UserCreateDto, UserViewDto } from '../users/dto';
 
 @ApiUseTags(TAGS.login)
 @Controller('nextagent/api/v1')
@@ -25,9 +25,9 @@ export class AuthController {
         return this.authService.loginFO(user);
     }
 
-    @ApiResponse({status: 200, description: 'User created'})
+    @ApiResponse({status: 200, description: 'User created', type: UserViewDto})
     @Post('register')
-    async register(@Body() user: UserBOCreateDto): Promise<any> {
+    async register(@Body() user: UserCreateDto): Promise<any> {
         return this.authService.register(user);
     }
 }

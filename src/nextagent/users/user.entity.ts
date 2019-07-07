@@ -22,7 +22,7 @@ export class User {
     @Column({default: true})
     isActive: boolean;
 
-    @Column({default: 'CUSTOMER'})
+    @Column({default: 'ROLE_CUSTOMER'})
     role: string;
 
     @Column({nullable: true})

@@ -40,20 +40,29 @@ export class UsersService {
         }
     }
 
-    async getById(id: number): Promise<User> {
-        return await this.usersRepository.findOne({id});
+    async getById(id: number): Promise<UserViewModel> {
+        return await new Promise(async (resolve, reject) => {
+            const userData = await this.usersRepository.findOne({id});
+            const user = new UserViewModel(userData);
+            resolve(user);
+        });
     }
 
     async getByEmail(email: string): Promise<User> {
         return await this.usersRepository.findOne({email});
     }
 
-    async addUser(user: any): Promise<User> {
-        return await this.usersRepository.save(user);
+    async addUser(data: any): Promise<UserViewModel> {
+        return await new Promise(async (resolve, reject) => {
+            const userData = await this.usersRepository.save(data);
+            const user = new UserViewModel(userData);
+            resolve(user);
+        });
     }
 
-    async updateUser(id, user: any): Promise<any> {
-        return await this.usersRepository.update({id}, user);
+    async updateUser(id, user: any): Promise<UserViewModel> {
+        await this.usersRepository.update({id}, user);
+        return await this.getById(id);
     }
 
     deleteUser(id: number): void {
