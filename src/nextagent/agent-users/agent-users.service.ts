@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Repository, Not } from 'typeorm';
+import { Repository, Not, IsNull } from 'typeorm';
 import { AgentUserListModel, AgentUserViewModel } from './agent-user.model';
 import { AgentModel } from '../agents/agent.model';
 import { REPOSITORIES, ROLES } from '../types';
@@ -17,7 +17,7 @@ export class AgentUsersService {
 
     async getAll(): Promise<AgentUserListModel[]> {
         return await new Promise(async (resolve, reject) => {
-            const users = await this.usersRepository.find({agent: Not(null)});
+            const users = await this.usersRepository.find({agent: Not(IsNull())});
             const agents = await this.agentsRepository.find();
 
             resolve(users.map(userData => {
