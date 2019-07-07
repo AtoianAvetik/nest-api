@@ -12,6 +12,28 @@ export class AgentModel {
     }
 }
 
+export class AgentDomainModel {
+    companyName: string;
+    domain: string;
+    loginImageUrl: string;
+    loginImageThumbnailUrl: string;
+    logoImageUrl: string;
+    logoImageThumbnailUrl: string;
+    primaryColor: string;
+    secondaryColor: string;
+
+    constructor(data) {
+        this.companyName = data.companyName;
+        this.domain = data.domain;
+        this.loginImageUrl = data.loginImageUrl;
+        this.loginImageThumbnailUrl = data.loginImageThumbnailUrl;
+        this.logoImageUrl = data.logoImageUrl;
+        this.logoImageThumbnailUrl = data.logoImageThumbnailUrl;
+        this.primaryColor = data.primaryColor;
+        this.secondaryColor = data.secondaryColor;
+    }
+}
+
 export class AgentListModel extends AgentModel {
     agentUsers: UserModel[];
 

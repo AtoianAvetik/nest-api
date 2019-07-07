@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Agent } from './agent.entity';
 import { REPOSITORIES } from '../types';
-import { AgentListModel, AgentViewModel } from './agent.model';
+import { AgentDomainModel, AgentListModel, AgentViewModel } from './agent.model';
 import { UsersService } from '../users/users.service';
 import * as _ from 'lodash';
 
@@ -44,6 +44,14 @@ export class AgentsService {
                     agent.agentSuppliers.push(_.find(users, {id: Number(userId)}));
                 });
             }
+            resolve(agent);
+        });
+    }
+
+    async getByDomain(domain: string): Promise<AgentDomainModel> {
+        return await new Promise(async (resolve, reject) => {
+            const agentData = await this.agentsRepository.findOne({domain});
+            const agent = new AgentDomainModel(agentData);
             resolve(agent);
         });
     }

@@ -1,9 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { AgentsService } from './agents.service';
 import { ApiUseTags, ApiResponse } from '@nestjs/swagger';
-import { AgentListDto, AgentViewDto, AgentCreateDto } from './dto';
-import { AgentListModel, AgentViewModel } from './agent.model';
-import { AgentThemingDto } from './dto/agent-theming.dto';
+import { AgentListDto, AgentViewDto, AgentCreateDto, AgentDomainDto, AgentThemingDto } from './dto';
+import { AgentDomainModel, AgentListModel, AgentViewModel } from './agent.model';
 
 @ApiUseTags('Agents')
 @Controller('nextagent/api/v1/agents')
@@ -29,6 +28,13 @@ export class AgentsController {
     @Get(':id')
     getById(@Param('id') id: number): Promise<AgentViewModel> {
         return this.agentsService.getById(id);
+    }
+
+    @ApiResponse({status: 200, description: 'Returns Agent data', type: [AgentDomainDto]})
+    @ApiResponse({status: 404, description: 'Agent not found'})
+    @Get('domain/:domain')
+    getByDomain(@Param('domain') domain: string): Promise<AgentDomainModel> {
+        return this.agentsService.getByDomain(domain);
     }
 
     @ApiResponse({status: 200, description: 'Agent updated', type: AgentViewDto})
