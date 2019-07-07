@@ -3,8 +3,9 @@ import { AgentsService } from './agents.service';
 import { ApiUseTags, ApiResponse } from '@nestjs/swagger';
 import { AgentListDto, AgentViewDto, AgentCreateDto, AgentDomainDto, AgentThemingDto } from './dto';
 import { AgentDomainModel, AgentListModel, AgentViewModel } from './agent.model';
+import { TAGS } from '../types';
 
-@ApiUseTags('Agents')
+@ApiUseTags(TAGS.agents)
 @Controller('nextagent/api/v1/agents')
 export class AgentsController {
     constructor(private readonly agentsService: AgentsService) {

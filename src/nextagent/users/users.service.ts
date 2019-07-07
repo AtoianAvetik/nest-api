@@ -3,7 +3,6 @@ import { Repository } from 'typeorm';
 import { REPOSITORIES } from '../types';
 import { Agent, User } from '../entities';
 import { UserModel, UserViewModel } from './user.model';
-import { AgentsService } from '../agents/agents.service';
 
 @Injectable()
 export class UsersService {
@@ -43,6 +42,10 @@ export class UsersService {
 
     async getById(id: number): Promise<User> {
         return await this.usersRepository.findOne({id});
+    }
+
+    async getByEmail(email: string): Promise<User> {
+        return await this.usersRepository.findOne({email});
     }
 
     async addUser(user: any): Promise<User> {

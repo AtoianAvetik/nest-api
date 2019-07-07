@@ -2,9 +2,9 @@ import { Entity, Column, PrimaryGeneratedColumn, Generated, CreateDateColumn, Be
 import * as crypto from 'crypto';
 
 @Entity({
-    name: 'users',
+    name: 'users-bo',
 })
-export class User {
+export class UserBO {
     @PrimaryGeneratedColumn()
     @Generated('increment')
     id: number;
@@ -14,25 +14,16 @@ export class User {
 
     @BeforeInsert()
     hashPassword() {
-        this.plainPassword = crypto.createHmac('sha256', this.plainPassword).digest('hex');
+        this.password = crypto.createHmac('sha256', this.password).digest('hex');
     }
     @Column({length: 500})
-    plainPassword: string;
-
-    @Column({default: true})
-    isActive: boolean;
+    password: string;
 
     @Column({default: 'CUSTOMER'})
     role: string;
 
-    @Column({nullable: true})
-    agent?: number;
-
-    @Column({nullable: true})
-    owner?: number;
-
-    @Column({nullable: true})
-    supplier?: number;
+    @Column({default: true})
+    isActive: boolean;
 
     @CreateDateColumn()
     createdAt: Date;

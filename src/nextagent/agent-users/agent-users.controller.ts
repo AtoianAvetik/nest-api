@@ -3,8 +3,9 @@ import { AgentUsersService } from './agent-users.service';
 import { ApiUseTags, ApiResponse } from '@nestjs/swagger';
 import { AgentUserCreateDto, AgentUserListDto, AgentUserViewDto } from './dto';
 import { AgentUserListModel, AgentUserViewModel } from './agent-user.model';
+import { TAGS } from '../types';
 
-@ApiUseTags('AgentUsers')
+@ApiUseTags(TAGS.agentUsers)
 @Controller('nextagent/api/v1/agent_users')
 export class AgentUsersController {
     constructor(private readonly agentUsersService: AgentUsersService) {
@@ -19,7 +20,7 @@ export class AgentUsersController {
     @ApiResponse({status: 200, description: 'Agent user created', type: AgentUserViewDto})
     @ApiResponse({status: 400, description: 'Validation failed'})
     @Post()
-    addExample(@Body() agentUser: AgentUserCreateDto): Promise<AgentUserViewModel> {
+    addAgentUser(@Body() agentUser: AgentUserCreateDto): Promise<AgentUserViewModel> {
         return this.agentUsersService.addAgentUser(agentUser);
     }
 

@@ -3,6 +3,7 @@ export const DATABASE_CONNECTION = 'NEXTAGENT_DATABASE_CONNECTION';
 export const REPOSITORIES = {
     agents: 'NEXTAGENT_AGENTS_REPOSITORY',
     users: 'NEXTAGENT_USERS_REPOSITORY',
+    usersBO: 'NEXTAGENT_USERS_BO_REPOSITORY',
     owners: 'NEXTAGENT_OWNERS_REPOSITORY',
     suppliers: 'NEXTAGENT_SUPPLIERS_REPOSITORY',
     productCategories: 'NEXTAGENT_PRODUCT_CATEGORIES_REPOSITORY',
@@ -23,6 +24,7 @@ export const REPOSITORIES = {
 };
 
 export const TAGS = {
+    login: 'Login',
     agents: 'Agents',
     users: 'Users',
     agentUsers: 'AgentUsers',

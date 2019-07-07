@@ -1,10 +1,11 @@
-import { Controller, Get, Param, Req, Headers } from '@nestjs/common';
+import { Controller, Get, Param, Headers } from '@nestjs/common';
 import { ApiUseTags, ApiResponse } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { UserViewModel } from './user.model';
 import { UserEmailDto, UserViewDto } from './dto';
+import { TAGS } from '../types';
 
-@ApiUseTags('Users')
+@ApiUseTags(TAGS.users)
 @Controller('nextagent/api/v1/users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {
@@ -12,9 +13,7 @@ export class UsersController {
 
     @ApiResponse({status: 200, description: 'Returns currently logged in user', type: UserViewDto})
     @Get('current')
-    getCurrent(@Headers('X-Agent-Domain') header: any): Promise<UserViewModel> {
-        // TODO
-        const domain = 'a1';
+    getCurrent(@Headers('x-agent-domain') domain: string): Promise<UserViewModel> {
         return this.usersService.getCurrent(domain);
     }
 

@@ -15,6 +15,8 @@ async function bootstrap() {
 
     openApiService.applyApis(app, openApiConfigs);
 
+    app.enableCors();
+
     await app.listen(configService.get('PORT'), welcom(configService.get('PORT')));
 }
 
