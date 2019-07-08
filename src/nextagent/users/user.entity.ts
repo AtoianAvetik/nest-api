@@ -13,7 +13,7 @@ export class User {
     email: string;
 
     @BeforeInsert()
-    async hashPassword() {
+    hashPassword() {
         this.plainPassword = crypto.createHmac('sha256', this.plainPassword).digest('hex');
     }
     @Column({length: 500})
