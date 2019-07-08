@@ -54,14 +54,16 @@ export class UsersService {
 
     async addUser(data: any): Promise<UserViewModel> {
         return await new Promise(async (resolve, reject) => {
-            const userData = await this.usersRepository.save(data);
+            const entity = Object.assign(new User(), data);
+            const userData = await this.usersRepository.save(entity);
             const user = new UserViewModel(userData);
             resolve(user);
         });
     }
 
-    async updateUser(id, user: any): Promise<UserViewModel> {
-        await this.usersRepository.update({id}, user);
+    async updateUser(id, data: any): Promise<UserViewModel> {
+        const entity = Object.assign(new User(), data);
+        await this.usersRepository.update({id}, entity);
         return await this.getById(id);
     }
 

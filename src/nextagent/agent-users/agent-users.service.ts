@@ -46,9 +46,10 @@ export class AgentUsersService {
         });
     }
 
-    async addAgentUser(user: any): Promise<AgentUserViewModel> {
+    async addAgentUser(data: any): Promise<AgentUserViewModel> {
         return await new Promise(async (resolve, reject) => {
-            const userData = await this.usersRepository.save(Object.assign({}, user, {role: ROLES.agent}));
+            const entity = Object.assign(new User(), data, {role: ROLES.agent});
+            const userData = await this.usersRepository.save(entity);
             const addedUser = new AgentUserViewModel(userData);
 
             if (userData.agent) {
@@ -64,8 +65,9 @@ export class AgentUsersService {
         });
     }
 
-    async updateAgentUser(id, user: any): Promise<AgentUserViewModel> {
-        await this.usersRepository.update({id}, user);
+    async updateAgentUser(id, data: any): Promise<AgentUserViewModel> {
+        const entity = Object.assign(new User(), data);
+        await this.usersRepository.update({id}, entity);
         return await this.getById(id);
     }
 

@@ -56,21 +56,24 @@ export class AgentsService {
         });
     }
 
-    async addAgent(agent: any): Promise<AgentViewModel> {
+    async addAgent(data: any): Promise<AgentViewModel> {
         return await new Promise((resolve, reject) => {
-            this.agentsRepository.save(agent).then(agentData => {
+            const entity = Object.assign(new Agent(), data);
+            this.agentsRepository.save(entity).then(agentData => {
                 resolve(new AgentViewModel(agentData));
             });
         });
     }
 
-    async updateAgent(id, agent: any): Promise<AgentViewModel> {
-        await this.agentsRepository.update({id}, agent);
+    async updateAgent(id, data: any): Promise<AgentViewModel> {
+        const entity = Object.assign(new Agent(), data);
+        await this.agentsRepository.update({id}, entity);
         return await this.getById(id);
     }
 
     async updateAgentTheming(id, theming: any): Promise<AgentViewModel> {
-        await this.agentsRepository.update({id}, theming);
+        const entity = Object.assign(new Agent(), theming);
+        await this.agentsRepository.update({id}, entity);
         return await this.getById(id);
     }
 
