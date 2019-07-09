@@ -5,6 +5,7 @@ import { UsersService } from '../users/users.service';
 import { ROLES } from '../types';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { CryptographerService } from './cryptographer.service';
+import { BadCredentialsException } from '../_exceptions';
 
 @Injectable()
 export class AuthService {
@@ -20,11 +21,11 @@ export class AuthService {
 
         if ((fo && (!userData || userData.role === ROLES.admin)) ||
             (!fo && (!userData || userData.role !== ROLES.admin)) ) {
-            throw new UnauthorizedException('Bad credentials');
+            throw new BadCredentialsException();
         }
 
         if ( !this.$cryptoService.checkPassword(userData.plainPassword, data.password) ) {
-            throw new UnauthorizedException('Invalid password');
+            throw new BadCredentialsException();
         }
 
         return await this.createToken(userData);

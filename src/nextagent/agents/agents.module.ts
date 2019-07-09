@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from '../../_database/database.module';
 import { nextagentProviders } from '../nextagent.providers';
 import { AgentsService } from './agents.service';
 import { AgentsController } from './agents.controller';
