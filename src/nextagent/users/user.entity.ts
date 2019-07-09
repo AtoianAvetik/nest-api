@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, Generated, CreateDateColumn, BeforeInsert } from 'typeorm';
-import * as crypto from 'crypto';
+import { CryptographerService } from '../auth/cryptographer.service';
 
 @Entity({
     name: 'users',
@@ -14,8 +14,9 @@ export class User {
 
     @BeforeInsert()
     hashPassword() {
-        this.plainPassword = crypto.createHmac('sha256', this.plainPassword).digest('hex');
+        this.plainPassword = new CryptographerService().hashPassword(this.plainPassword);
     }
+
     @Column({length: 500})
     plainPassword: string;
 

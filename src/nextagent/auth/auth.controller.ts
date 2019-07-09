@@ -15,14 +15,14 @@ export class AuthController {
     @ApiResponse({status: 401, description: 'Login failed', type: LoginExceptionDto})
     @Post('login')
     async login(@Body() user: LoginDto): Promise<{token: string}> {
-        return this.authService.loginBO(user);
+        return this.authService.login(user);
     }
 
     @ApiResponse({status: 200, description: 'Login successful', type: LoginResponseDto})
     @ApiResponse({status: 401, description: 'Login failed', type: LoginExceptionDto})
     @Post('fo_login')
     async loginFO(@Body() user: LoginDto, @Headers('x-agent-domain') domain: string): Promise<{token: string}> {
-        return this.authService.loginFO(user);
+        return this.authService.login(user, true);
     }
 
     @ApiResponse({status: 200, description: 'User created', type: UserViewDto})

@@ -5,10 +5,12 @@ import { OpenApiService } from './_shared/open-api.service';
 import { ExampleModule } from './example/example.module';
 import { HerasModule } from './heras/heras.module';
 import { NextagentModule } from './nextagent/nextagent.module';
+import { DatabaseModule } from './_database/database.module';
 
 @Module({
     imports: [
         ConfigModule,
+        DatabaseModule,
         ExampleModule,
         HerasModule,
         NextagentModule,

@@ -1,17 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiUseTags, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AgentsService } from './agents.service';
-import { ApiUseTags, ApiResponse } from '@nestjs/swagger';
 import { AgentListDto, AgentViewDto, AgentCreateDto, AgentDomainDto, AgentThemingDto } from './dto';
 import { AgentDomainModel, AgentListModel, AgentViewModel } from './agent.model';
 import { TAGS } from '../types';
 
 @ApiUseTags(TAGS.agents)
+@ApiBearerAuth()
 @Controller('nextagent/api/v1/agents')
 export class AgentsController {
     constructor(private readonly agentsService: AgentsService) {
     }
 
     @ApiResponse({status: 200, description: 'Returns list of agent', isArray: true, type: AgentListDto})
+    @UseGuards(AuthGuard('jwt'))
     @Get()
     getAll(): Promise<AgentListModel[]> {
         return this.agentsService.getAll();

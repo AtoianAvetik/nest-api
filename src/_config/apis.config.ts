@@ -1,6 +1,8 @@
 import { ExampleModule } from '../example/example.module';
+
 import { HerasModule } from '../heras/heras.module';
-import { NextagentModule } from '../nextagent/nextagent.module';
+
+import { MODULES as NEXTAGENT_MODULES } from '../nextagent/modules';
 import { TAGS as NEXTAGENT_TAGS } from '../nextagent/types';
 
 export const openApiConfigs = [
@@ -25,12 +27,13 @@ export const openApiConfigs = [
         },
     },
     {
-        constructors: [NextagentModule],
+        constructors: NEXTAGENT_MODULES,
         path: 'nextagent/api/v1/docs',
         options: {
             title: 'The Next Agent',
             description: 'The Next Agents API description',
             version: '1.0',
+            authorization: 'BEARER_AUTH',
             tags: NEXTAGENT_TAGS,
         },
     },

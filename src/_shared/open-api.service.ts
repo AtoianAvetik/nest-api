@@ -25,8 +25,11 @@ export class OpenApiService {
             }
         }
 
-        const buildedOptions = options.build();
+        if ( module.options.authorization === 'BEARER_AUTH' ) {
+            options.addBearerAuth('Authorization', 'header');
+        }
 
+        const buildedOptions = options.build();
         const document = SwaggerModule.createDocument(app, buildedOptions, {
             include: module.constructors,
         });
