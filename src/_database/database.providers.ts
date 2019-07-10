@@ -1,6 +1,6 @@
 import { createConnection } from 'typeorm';
 
-import { Example } from 'src/example/example.entity';
+import { Example } from '../example/example.entity';
 import { Data } from '../heras/data.entity';
 import { DATABASE_CONNECTION as NEXTAGENT_DB_CONNECTION } from '../nextagent/types';
 import NEXTAGET_ENTITIES from '../nextagent/entities';
