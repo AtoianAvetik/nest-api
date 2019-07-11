@@ -2,7 +2,7 @@ import { Body, Controller, Headers, Post } from '@nestjs/common';
 import { ApiUseTags, ApiResponse } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto, LoginResponseDto } from './dto';
-import { TAGS } from '../types';
+import { TAGS } from '../constans';
 import { UserCreateDto, UserViewDto } from '../users/dto';
 import { ExceptionDto } from '../_dto';
 

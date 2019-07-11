@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Repository, Not, IsNull } from 'typeorm';
 import { AgentUserListModel, AgentUserViewModel } from './agent-user.model';
 import { AgentModel } from '../agents/agent.model';
-import { REPOSITORIES, ROLES } from '../types';
+import { REPOSITORIES, ROLES } from '../constans';
 import { Agent } from '../agents/agent.entity';
 import { User } from '../users/user.entity';
 import * as _ from 'lodash';

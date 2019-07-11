@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserModel } from '../users/user.model';
 import { UsersService } from '../users/users.service';
-import { ROLES } from '../types';
+import { ROLES } from '../constans';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { CryptographerService } from './cryptographer.service';
 import { BadCredentialsException } from '../_exceptions';

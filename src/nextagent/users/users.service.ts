@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { REPOSITORIES } from '../types';
+import { REPOSITORIES } from '../constans';
 import { Agent, User } from '../entities';
 import { UserModel, UserViewModel } from './user.model';
 

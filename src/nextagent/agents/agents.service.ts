@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Agent } from './agent.entity';
-import { REPOSITORIES } from '../types';
+import { REPOSITORIES } from '../constans';
 import { AgentDomainModel, AgentListModel, AgentViewModel } from './agent.model';
 import { UsersService } from '../users/users.service';
 import * as _ from 'lodash';

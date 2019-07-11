@@ -5,11 +5,12 @@ import { AgentsService } from './agents.service';
 import { AgentListDto, AgentViewDto, AgentCreateDto, AgentDomainDto, AgentThemingDto } from './dto';
 import { AgentDomainModel, AgentListModel, AgentViewModel } from './agent.model';
 import { ValidationErrorDto } from '../_dto';
-import { TAGS } from '../types';
+import { TAGS, API_PATH } from '../constans';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { join } from 'path';
 
 @ApiUseTags(TAGS.agents)
-@Controller('nextagent/api/v1/agents')
+@Controller(API_PATH + 'agents')
 export class AgentsController {
     constructor(private readonly agentsService: AgentsService) {
     }
@@ -85,7 +86,7 @@ export class AgentsController {
     @Post(':id/images/login')
     @UseInterceptors(FileInterceptor('loginImageFile'))
     addAgentLoginImage(@Param('id') id: number, @UploadedFile() file, @Req() req): Promise<AgentViewModel> {
-        return this.agentsService.addAgentLoginImage(id, req.headers.host + '\\nextagent\\api\\v1\\agents\\images\\' + file.filename);
+        return this.agentsService.addAgentLoginImage(id, join(req.headers.host, API_PATH, 'agents/images/', file.filename));
     }
 
     // @ApiBearerAuth()

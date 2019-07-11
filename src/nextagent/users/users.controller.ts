@@ -3,10 +3,10 @@ import { ApiUseTags, ApiResponse } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { UserViewModel } from './user.model';
 import { UserEmailDto, UserViewDto } from './dto';
-import { TAGS } from '../types';
+import { TAGS, API_PATH } from '../constans';
 
 @ApiUseTags(TAGS.users)
-@Controller('nextagent/api/v1/users')
+@Controller(API_PATH + 'users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {
     }

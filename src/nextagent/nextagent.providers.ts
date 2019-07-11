@@ -1,6 +1,6 @@
 import { Connection } from 'typeorm';
 import { Agent, User } from './entities';
-import { DATABASE_CONNECTION, REPOSITORIES } from './types';
+import { DATABASE_CONNECTION, REPOSITORIES } from './constans';
 
 export const nextagentProviders = [
     {

@@ -2,7 +2,7 @@ import { createConnection } from 'typeorm';
 
 import { Example } from '../example/example.entity';
 import { Data } from '../heras/data.entity';
-import { DATABASE_CONNECTION as NEXTAGENT_DB_CONNECTION } from '../nextagent/types';
+import { DATABASE_CONNECTION as NEXTAGENT_DB_CONNECTION } from '../nextagent/constans';
 import NEXTAGET_ENTITIES from '../nextagent/entities';
 
 export const databaseProviders = [

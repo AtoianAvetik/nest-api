@@ -3,7 +3,7 @@ import { ExampleModule } from '../example/example.module';
 import { HerasModule } from '../heras/heras.module';
 
 import { MODULES as NEXTAGENT_MODULES } from '../nextagent/modules';
-import { TAGS as NEXTAGENT_TAGS } from '../nextagent/types';
+import { TAGS as NEXTAGENT_TAGS, API_PATH as NEXTAGENT_API_PATH } from '../nextagent/constans';
 
 export const openApiConfigs = [
     {
@@ -28,7 +28,7 @@ export const openApiConfigs = [
     },
     {
         constructors: NEXTAGENT_MODULES,
-        path: 'nextagent/api/v1/docs',
+        path: NEXTAGENT_API_PATH + 'docs',
         options: {
             title: 'The Next Agent',
             description: 'The Next Agents API description',
