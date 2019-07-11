@@ -77,6 +77,12 @@ export class AgentsService {
         return await this.getById(id);
     }
 
+    async addAgentLoginImage(id, path): Promise<AgentViewModel> {
+        const entity = Object.assign(new Agent(), {loginImageUrl: path, loginImageThumbnailUrl: path});
+        await this.agentsRepository.update({id}, entity);
+        return await this.getById(id);
+    }
+
     deleteAgent(id: number): void {
         this.agentsRepository.delete({id});
     }
