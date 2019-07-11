@@ -14,7 +14,7 @@ export class OpenApiService {
             .setVersion(module.options.version);
 
         // TODO fix for known bug https://github.com/nestjs/swagger/pull/261
-        options.document.tags = [];
+        (options as any).document.tags = [];
 
         if ( module.options.tags.constructor === Array ) {
             module.options.tags.forEach(tag => options.addTag(tag));
