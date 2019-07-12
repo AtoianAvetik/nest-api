@@ -7,12 +7,13 @@ import { AgentDomainModel, AgentListModel, AgentViewModel } from './agent.model'
 import { ValidationErrorDto } from '../_dto';
 import { TAGS, API_PATH } from '../constans';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { join } from 'path';
+import { ConfigService } from '../../_config/config.service';
 
 @ApiUseTags(TAGS.agents)
 @Controller(API_PATH + 'agents')
 export class AgentsController {
-    constructor(private readonly agentsService: AgentsService) {
+    constructor(private readonly agentsService: AgentsService,
+                private readonly $configService: ConfigService) {
     }
 
     @ApiResponse({status: 200, description: 'Returns list of agent', isArray: true, type: AgentListDto})
@@ -86,7 +87,7 @@ export class AgentsController {
     @Post(':id/images/login')
     @UseInterceptors(FileInterceptor('loginImageFile'))
     addAgentLoginImage(@Param('id') id: number, @UploadedFile() file, @Req() req): Promise<AgentViewModel> {
-        return this.agentsService.addAgentLoginImage(id, join(req.headers.host, API_PATH, 'agents/images/', file.filename));
+        return this.agentsService.addAgentLoginImage(id, this.$configService.get('ORIGIN') + API_PATH + 'agents/images/' + file.filename);
     }
 
     // @ApiBearerAuth()
