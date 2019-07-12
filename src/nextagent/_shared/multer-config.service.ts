@@ -6,6 +6,7 @@ import { extname } from 'path';
 import { diskStorage } from 'multer';
 import { v4 as uuid } from 'uuid';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { UPLOADS_DEST } from '../constans';
 
 @Injectable()
 export class MulterConfigService implements MulterOptionsFactory {
@@ -14,11 +15,11 @@ export class MulterConfigService implements MulterOptionsFactory {
 
     createMulterOptions(): MulterModuleOptions {
         return {
-            dest: this.$configService.get('UPLOAD_DEST'),
+            dest: this.$configService.get('UPLOADS_DEST') + UPLOADS_DEST,
             storage: diskStorage({
                 // Destination storage path details
                 destination: (req: any, file: any, cb: any) => {
-                    const uploadPath = this.$configService.get('UPLOAD_DEST');
+                    const uploadPath = this.$configService.get('UPLOADS_DEST') + UPLOADS_DEST;
                     // Create folder if doesn't exist
                     if (!existsSync(uploadPath)) {
                         mkdirSync(uploadPath);

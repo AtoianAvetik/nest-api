@@ -2,6 +2,8 @@ export const DATABASE_CONNECTION = 'NEXTAGENT_DATABASE_CONNECTION';
 
 export const API_PATH = 'nextagent/api/v1/';
 
+export const UPLOADS_DEST = '/nextagent';
+
 export const REPOSITORIES = {
     agents: 'NEXTAGENT_AGENTS_REPOSITORY',
     users: 'NEXTAGENT_USERS_REPOSITORY',
