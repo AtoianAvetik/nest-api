@@ -14,22 +14,17 @@ export class UsersService {
     }
 
     async getAll(): Promise<UserModel[]> {
-        return await new Promise(async (resolve, reject) => {
-            const users = await this.usersRepository.find();
-
-            resolve(users.map(user => {
-                return new UserModel(user);
-            }));
-        });
+        const users = await this.usersRepository.find();
+        return Promise.resolve(users.map(user => {
+            return new UserModel(user);
+        }));
     }
 
     async getCurrent(domain: string): Promise<UserViewModel> {
-        return await new Promise(async (resolve, reject) => {
-            const agentData = await this.agentsFindOne({domain});
-            const userData = await this.usersFindOne({id: agentData.agentUsers[0]});
-            const user = new UserViewModel(userData);
-            resolve(user);
-        });
+        const agentData = await this.agentsFindOne({domain});
+        const userData = await this.usersFindOne({id: agentData.agentUsers[0]});
+        const user = new UserViewModel(userData);
+        return Promise.resolve(user);
     }
 
     async checkExists(email: string): Promise<{ email: string }> {
@@ -42,11 +37,9 @@ export class UsersService {
     }
 
     async getById(id: number): Promise<UserViewModel> {
-        return await new Promise(async (resolve, reject) => {
-            const userData = await this.usersFindOne({id});
-            const user = new UserViewModel(userData);
-            resolve(user);
-        });
+        const userData = await this.usersFindOne({id});
+        const user = new UserViewModel(userData);
+        return Promise.resolve(user);
     }
 
     async getByEmail(email: string): Promise<User> {
@@ -54,12 +47,9 @@ export class UsersService {
     }
 
     async addUser(data: any): Promise<UserViewModel> {
-        return await new Promise(async (resolve, reject) => {
-            const entity = Object.assign(new User(), data);
-            const userData = await this.usersRepository.save(entity);
-            const user = new UserViewModel(userData);
-            resolve(user);
-        });
+        const entity = Object.assign(new User(), data);
+        const userData = await this.usersRepository.save(entity);
+        return Promise.resolve(new UserViewModel(userData));
     }
 
     async updateUser(id, data: any): Promise<UserViewModel> {
@@ -68,8 +58,11 @@ export class UsersService {
         return await this.getById(id);
     }
 
-    deleteUser(id: number): void {
-        this.usersRepository.delete({id});
+    async deleteUser(id: number): Promise<any> {
+        const res = await this.usersRepository.delete({id});
+        if ( res.affected === 0 ) {
+            throw new NotFoundException( 'User not found' );
+        }
     }
 
     async usersFindOne( condition ): Promise<User> {

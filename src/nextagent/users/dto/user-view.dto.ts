@@ -4,7 +4,7 @@ export class UserViewDto {
     @ApiModelProperty()
     readonly id: number;
 
-    @ApiModelProperty()
+    @ApiModelProperty({maxLength: 128, minLength: 6})
     readonly email: string;
 
     @ApiModelProperty()
@@ -13,6 +13,6 @@ export class UserViewDto {
     @ApiModelProperty()
     readonly role: string;
 
-    @ApiModelProperty()
-    readonly createdAt: Date;
+    @ApiModelProperty({format: 'date-time'})
+    readonly createdAt: string;
 }
