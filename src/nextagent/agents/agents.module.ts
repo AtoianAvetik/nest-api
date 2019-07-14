@@ -28,5 +28,8 @@ import { MODULE_UPLOADS_DEST } from '../constans';
         AgentsService,
         UsersService,
     ],
+    exports: [
+        AgentsService,
+    ],
 })
 export class AgentsModule {}

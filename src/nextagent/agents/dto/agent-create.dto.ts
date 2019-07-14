@@ -1,9 +1,9 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export class AgentCreateDto {
-    @ApiModelProperty()
+    @ApiModelProperty({maxLength: 100, minLength: 2})
     readonly companyName: string;
 
-    @ApiModelProperty()
+    @ApiModelProperty({maxLength: 100, minLength: 6, description: 'Valid domain without protocol or path.'})
     readonly domain: string;
 }

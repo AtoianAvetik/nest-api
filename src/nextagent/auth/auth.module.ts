@@ -5,6 +5,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersModule } from '../users/users.module';
+import { AgentsModule } from '../agents/agents.module';
 import { ConfigService } from '../../_config/config.service';
 import { CryptographerService } from './cryptographer.service';
 
@@ -21,6 +22,7 @@ import { CryptographerService } from './cryptographer.service';
             inject: [ConfigService],
         }),
         UsersModule,
+        AgentsModule,
     ],
     controllers: [
         AuthController,

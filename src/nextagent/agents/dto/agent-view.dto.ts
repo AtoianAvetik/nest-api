@@ -5,10 +5,10 @@ export class AgentViewDto {
     @ApiModelProperty()
     readonly id: number;
 
-    @ApiModelProperty()
+    @ApiModelProperty({maxLength: 100, minLength: 2})
     readonly companyName: string;
 
-    @ApiModelProperty()
+    @ApiModelProperty({maxLength: 100, minLength: 6})
     readonly domain: string;
 
     @ApiModelProperty()
@@ -23,10 +23,10 @@ export class AgentViewDto {
     @ApiModelProperty()
     readonly logoImageThumbnailUrl: string;
 
-    @ApiModelProperty()
+    @ApiModelProperty({maxLength: 7, minLength: 7, pattern: '#([A-Fa-f0-9]{6}).*'})
     readonly primaryColor: string;
 
-    @ApiModelProperty()
+    @ApiModelProperty({maxLength: 7, minLength: 7, pattern: '#([A-Fa-f0-9]{6}).*'})
     readonly secondaryColor: string;
 
     @ApiModelProperty({type: AgentUser1Dto, isArray: true})
@@ -35,6 +35,6 @@ export class AgentViewDto {
     @ApiModelProperty({type: AgentUser1Dto, isArray: true})
     readonly agentSuppliers: AgentUser1Dto[];
 
-    @ApiModelProperty()
-    readonly createdAt: Date;
+    @ApiModelProperty({format: 'date-time'})
+    readonly createdAt: string;
 }

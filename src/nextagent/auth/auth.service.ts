@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserModel } from '../users/user.model';
 import { UsersService } from '../users/users.service';
+import { AgentsService } from '../agents/agents.service';
 import { ROLES } from '../constans';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { CryptographerService } from './cryptographer.service';
@@ -11,13 +12,21 @@ import { BadCredentialsException } from '../_exceptions';
 export class AuthService {
     constructor(
         private readonly $usersService: UsersService,
+        private readonly $agentsService: AgentsService,
         private readonly jwtService: JwtService,
         private readonly $cryptoService: CryptographerService,
     ) {
     }
 
-    public async login(data: any, fo = false): Promise<any | { status: number }> {
+    public async login(data: any, fo = false, domain?): Promise<any | { status: number }> {
         const userData = await this.$usersService.getByEmail(data.username);
+
+        if ( fo && domain ) {
+            const agentData = await this.$agentsService.agentsFindOne( { domain } );
+            if ( userData.agent !== agentData.id ) {
+                throw new BadCredentialsException();
+            }
+        }
 
         if ((fo && (!userData || userData.role === ROLES.admin)) ||
             (!fo && (!userData || userData.role !== ROLES.admin)) ) {

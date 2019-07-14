@@ -23,7 +23,7 @@ export class AuthController {
     @ApiResponse({status: 401, description: 'Login failed', type: ExceptionDto})
     @Post('fo_login')
     async loginFO(@Body() user: LoginDto, @Headers('x-agent-domain') domain: string): Promise<{token: string}> {
-        return this.authService.login(user, true);
+        return this.authService.login(user, true, domain);
     }
 
     @ApiResponse({status: 200, description: 'User created', type: UserViewDto})

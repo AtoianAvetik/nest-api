@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Inject, Injectable, NotAcceptableException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Agent } from './agent.entity';
 import { REPOSITORIES, MODULE_UPLOADS_DEST } from '../constans';
@@ -32,10 +32,13 @@ export class AgentsService {
         } ) );
     }
 
-    async getById( id: number ): Promise<AgentViewModel> {
+    async getById( id: number, domain?: string ): Promise<AgentViewModel> {
         const users = await this.$usersService.getAll();
         const agentData = await this.agentsFindOne( { id } );
         const agent = new AgentViewModel( agentData );
+
+        // Only shows the Agent if it is the same Agent as the AgentUser and the X-Agent-Domain
+        this.validateDomain(domain, agentData.domain);
 
         agent.agentUsers = [];
         agent.agentSuppliers = [];
@@ -60,8 +63,14 @@ export class AgentsService {
         return Promise.resolve( new AgentViewModel( agentData ) );
     }
 
-    async updateAgent( id, data: any ): Promise<AgentViewModel> {
+    async updateAgent( id, data: any, domain?: string ): Promise<AgentViewModel> {
         const entity = Object.assign( new Agent(), data );
+
+        // Can only update Agent if it is the same Agent as the X-Agent-Domain
+        if ( domain ) {
+            const agentData = await this.agentsFindOne({id});
+            this.validateDomain(domain, agentData.domain);
+        }
         await this.agentsRepository.update( { id }, entity );
         return await this.getById( id );
     }
@@ -73,8 +82,11 @@ export class AgentsService {
         }
     }
 
-    async deleteLoginImage(id: number): Promise<any> {
+    async deleteLoginImage(id: number, domain?: string): Promise<any> {
         const agentData = await this.agentsFindOne( { id } );
+        // Can only delete Agent image if it is the same Agent as the X-Agent-Domain
+        this.validateDomain(domain, agentData.domain);
+
         const loginImagePath = agentData.loginImageUrl ? (this.$configService.get( 'GLOBAL_UPLOADS_DEST' ) + MODULE_UPLOADS_DEST.agents + '/' + agentData.loginImageUrl.split( '/' ).pop()) : '';
         const loginImageThumbnailPath = agentData.loginImageUrl ? (this.$configService.get( 'GLOBAL_UPLOADS_DEST' ) + MODULE_UPLOADS_DEST.agents + '/thumbnails/' + agentData.loginImageThumbnailUrl.split( '/' ).pop()) : '';
         await this.deleteImage(loginImagePath);
@@ -82,13 +94,22 @@ export class AgentsService {
         return Promise.resolve();
     }
 
-    async deleteLogoImage(id: number): Promise<any> {
+    async deleteLogoImage(id: number, domain?: string): Promise<any> {
         const agentData = await this.agentsFindOne( { id } );
+        // Can only delete Agent image if it is the same Agent as the X-Agent-Domain
+        this.validateDomain(domain, agentData.domain);
+
         const logoImagePath = agentData.logoImageUrl ? (this.$configService.get( 'GLOBAL_UPLOADS_DEST' ) + MODULE_UPLOADS_DEST.agents + '/' + agentData.logoImageUrl.split( '/' ).pop()) : '';
         const logoImageThumbnailPath = agentData.logoImageUrl ? (this.$configService.get( 'GLOBAL_UPLOADS_DEST' ) + MODULE_UPLOADS_DEST.agents + '/thumbnails/' + agentData.logoImageThumbnailUrl.split( '/' ).pop()) : '';
         await this.deleteImage(logoImagePath);
         await this.deleteImage(logoImageThumbnailPath);
         return Promise.resolve();
+    }
+
+    public validateDomain(domain, domainCandidate) {
+        if ( domain && domainCandidate !== domain ) {
+            throw new BadRequestException({code: HttpStatus.BAD_REQUEST, message: 'You do not have access to this action.'});
+        }
     }
 
     async deleteImage( path ): Promise<any> {

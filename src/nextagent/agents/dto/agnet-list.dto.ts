@@ -5,10 +5,10 @@ export class AgentListDto {
     @ApiModelProperty()
     readonly id: number;
 
-    @ApiModelProperty()
+    @ApiModelProperty({maxLength: 100, minLength: 2})
     readonly companyName: string;
 
-    @ApiModelProperty()
+    @ApiModelProperty({maxLength: 100, minLength: 6})
     readonly domain: string;
 
     @ApiModelProperty({type: AgentUser1Dto, isArray: true})

@@ -1,9 +1,9 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export class AgentThemingDto {
-    @ApiModelProperty()
+    @ApiModelProperty({description: 'Hex code of a color (7 characters, starting with #).'})
     readonly primaryColor: string;
 
-    @ApiModelProperty()
+    @ApiModelProperty({description: 'Hex code of a color (7 characters, starting with #).'})
     readonly secondaryColor: string;
 }

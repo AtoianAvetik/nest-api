@@ -1,10 +1,10 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export class AgentDomainDto {
-    @ApiModelProperty()
+    @ApiModelProperty({maxLength: 100, minLength: 2})
     readonly companyName: string;
 
-    @ApiModelProperty()
+    @ApiModelProperty({maxLength: 100, minLength: 6})
     readonly domain: string;
 
     @ApiModelProperty()
@@ -19,9 +19,9 @@ export class AgentDomainDto {
     @ApiModelProperty()
     readonly logoImageThumbnailUrl: string;
 
-    @ApiModelProperty()
+    @ApiModelProperty({maxLength: 7, minLength: 7, pattern: '#([A-Fa-f0-9]{6}).*'})
     readonly primaryColor: string;
 
-    @ApiModelProperty()
+    @ApiModelProperty({maxLength: 7, minLength: 7, pattern: '#([A-Fa-f0-9]{6}).*'})
     readonly secondaryColor: string;
 }
