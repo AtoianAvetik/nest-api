@@ -1,4 +1,4 @@
-import { BadRequestException, HttpStatus, Inject, Injectable, NotAcceptableException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Agent } from './agent.entity';
 import { REPOSITORIES, MODULE_UPLOADS_DEST } from '../constans';

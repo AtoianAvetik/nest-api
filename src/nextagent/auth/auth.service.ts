@@ -21,10 +21,14 @@ export class AuthService {
     public async login(data: any, fo = false, domain?): Promise<any | { status: number }> {
         const userData = await this.$usersService.getByEmail(data.username);
 
-        if ( fo && domain ) {
-            const agentData = await this.$agentsService.agentsFindOne( { domain } );
-            if ( userData.agent !== agentData.id ) {
-                throw new BadCredentialsException();
+        if ( fo ) {
+            if ( domain ) {
+                const agentData = await this.$agentsService.agentsFindOne( { domain } );
+                if ( userData.agent !== agentData.id ) {
+                    throw new BadCredentialsException();
+                }
+            } else {
+                throw new BadCredentialsException('X-Agent-Domain missed.');
             }
         }
 

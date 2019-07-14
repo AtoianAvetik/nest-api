@@ -1,10 +1,10 @@
 import { HttpStatus, UnauthorizedException } from '@nestjs/common';
 
 export class BadCredentialsException extends UnauthorizedException {
-    constructor() {
+    constructor(message?) {
         super({
             code: HttpStatus.UNAUTHORIZED,
-            message: 'Bad credentials',
+            message: message || 'Bad credentials',
         });
     }
 }
