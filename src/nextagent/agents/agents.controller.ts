@@ -67,8 +67,7 @@ export class AgentsController {
             'Shows all Agents\n' +
             '\n' +
             'Accessible through FO with AgentUser\n' +
-            'Only shows the Agent if it is the same Agent as the AgentUser and the X-Agent-Domain',
-    })
+            'Only shows the Agent if it is the same Agent as the AgentUser and the X-Agent-Domain'})
     @ApiImplicitHeader({name: 'x-agent-domain', required: false})
     @ApiResponse({status: 200, description: 'Returns Agent data', type: [AgentViewDto]})
     @ApiResponse({status: 404, description: 'Agent not found'})

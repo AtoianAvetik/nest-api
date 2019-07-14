@@ -14,8 +14,8 @@ export class UsersService {
     }
 
     async getAll(): Promise<UserModel[]> {
-        const users = await this.usersRepository.find();
-        return Promise.resolve(users.map(user => {
+        const usersData = await this.usersRepository.find();
+        return Promise.resolve(usersData.map(user => {
             return new UserModel(user);
         }));
     }
