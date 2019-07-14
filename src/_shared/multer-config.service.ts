@@ -1,28 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { MulterModuleOptions, MulterOptionsFactory } from '@nestjs/platform-express';
-import { ConfigService } from '../../_config/config.service';
 import { existsSync, mkdirSync } from 'fs';
 import { extname } from 'path';
 import { diskStorage } from 'multer';
 import { v4 as uuid } from 'uuid';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { UPLOADS_DEST } from '../constans';
+
+const DEFAULT_CONFIG_OPTIONS = {
+    dest: './uploads',
+    limits: {
+        fileSize: 100000000,
+    },
+    fileFilter: {
+        mimeType: /\/(jpg|jpeg|png|gif)$/,
+    },
+};
 
 @Injectable()
 export class MulterConfigService implements MulterOptionsFactory {
-    constructor(private readonly $configService: ConfigService) {
-    }
-
-    createMulterOptions(): MulterModuleOptions {
+    createMulterOptions(options = {}): MulterModuleOptions {
+        const config = Object.assign(DEFAULT_CONFIG_OPTIONS, options);
         return {
-            dest: this.$configService.get('UPLOADS_DEST') + UPLOADS_DEST,
+            dest: config.dest,
             storage: diskStorage({
                 // Destination storage path details
                 destination: (req: any, file: any, cb: any) => {
-                    const uploadPath = this.$configService.get('UPLOADS_DEST') + UPLOADS_DEST;
+                    const uploadPath = config.dest;
                     // Create folder if doesn't exist
                     if (!existsSync(uploadPath)) {
-                        mkdirSync(uploadPath);
+                        mkdirSync(uploadPath, { recursive: true });
                     }
                     cb(null, uploadPath);
                 },
@@ -33,10 +39,10 @@ export class MulterConfigService implements MulterOptionsFactory {
                 },
             }),
             limits: {
-                fileSize: +this.$configService.get('MAX_FILE_SIZE'),
+                fileSize: +config.limits.fileSize,
             },
             fileFilter: (req: any, file: any, cb: any) => {
-                if (file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
+                if (file.mimetype.match(config.fileFilter.mimeType)) {
                     // Allow storage of file
                     cb(null, true);
                 } else {

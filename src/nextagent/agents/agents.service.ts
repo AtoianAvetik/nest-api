@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Agent } from './agent.entity';
-import { REPOSITORIES, UPLOADS_DEST } from '../constans';
+import { REPOSITORIES, MODULE_UPLOADS_DEST } from '../constans';
 import { AgentDomainModel, AgentListModel, AgentViewModel } from './agent.model';
 import { UsersService } from '../users/users.service';
 import { ConfigService } from '../../_config/config.service';
@@ -75,8 +75,8 @@ export class AgentsService {
 
     async deleteLoginImage(id: number): Promise<any> {
         const agentData = await this.agentsFindOne( { id } );
-        const loginImagePath = agentData.loginImageUrl ? (this.$configService.get( 'UPLOADS_DEST' ) + UPLOADS_DEST + '/' + agentData.loginImageUrl.split( '/' ).pop()) : '';
-        const loginImageThumbnailPath = agentData.loginImageUrl ? (this.$configService.get( 'UPLOADS_DEST' ) + UPLOADS_DEST + '/' + agentData.loginImageThumbnailUrl.split( '/' ).pop()) : '';
+        const loginImagePath = agentData.loginImageUrl ? (this.$configService.get( 'GLOBAL_UPLOADS_DEST' ) + MODULE_UPLOADS_DEST.agents + '/' + agentData.loginImageUrl.split( '/' ).pop()) : '';
+        const loginImageThumbnailPath = agentData.loginImageUrl ? (this.$configService.get( 'GLOBAL_UPLOADS_DEST' ) + MODULE_UPLOADS_DEST.agents + '/thumbnails/' + agentData.loginImageThumbnailUrl.split( '/' ).pop()) : '';
         await this.deleteImage(loginImagePath);
         await this.deleteImage(loginImageThumbnailPath);
         return Promise.resolve();
@@ -84,8 +84,8 @@ export class AgentsService {
 
     async deleteLogoImage(id: number): Promise<any> {
         const agentData = await this.agentsFindOne( { id } );
-        const logoImagePath = agentData.logoImageUrl ? (this.$configService.get( 'UPLOADS_DEST' ) + UPLOADS_DEST + '/' + agentData.logoImageUrl.split( '/' ).pop()) : '';
-        const logoImageThumbnailPath = agentData.logoImageUrl ? (this.$configService.get( 'UPLOADS_DEST' ) + UPLOADS_DEST + '/' + agentData.logoImageThumbnailUrl.split( '/' ).pop()) : '';
+        const logoImagePath = agentData.logoImageUrl ? (this.$configService.get( 'GLOBAL_UPLOADS_DEST' ) + MODULE_UPLOADS_DEST.agents + '/' + agentData.logoImageUrl.split( '/' ).pop()) : '';
+        const logoImageThumbnailPath = agentData.logoImageUrl ? (this.$configService.get( 'GLOBAL_UPLOADS_DEST' ) + MODULE_UPLOADS_DEST.agents + '/thumbnails/' + agentData.logoImageThumbnailUrl.split( '/' ).pop()) : '';
         await this.deleteImage(logoImagePath);
         await this.deleteImage(logoImageThumbnailPath);
         return Promise.resolve();

@@ -18,10 +18,12 @@ import { AgentsService } from './agents.service';
 import { AgentCreateDto, AgentDomainDto, AgentListDto, AgentThemingDto, AgentViewDto } from './dto';
 import { AgentDomainModel, AgentListModel, AgentViewModel } from './agent.model';
 import { ValidationErrorDto } from '../_dto';
-import { API_PATH, TAGS, UPLOADS_DEST } from '../constans';
+import { API_PATH, TAGS, MODULE_UPLOADS_DEST } from '../constans';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ConfigService } from '../../_config/config.service';
 import { AgentGuard } from './guards/agent.guard';
+import { Resize } from '../../_shared/sharp-resize';
+import * as fs from 'fs';
 
 @ApiUseTags( TAGS.agents )
 @Controller( API_PATH + 'agents' )
@@ -101,11 +103,18 @@ export class AgentsController {
     // @UseGuards(JwtAuthGuard)
     @UseGuards( AgentGuard )
     @Post( ':id/images/login' )
-    @UseInterceptors( FileInterceptor( 'loginImageFile' ) )
+    @UseInterceptors( FileInterceptor( 'loginImageFile', {}))
     async updateAgentLoginImage( @Param( 'id' ) id: number, @UploadedFile() file, @Req() req ): Promise<AgentViewModel> {
+        const fileResizer = new Resize(
+            this.$configService.get( 'GLOBAL_UPLOADS_DEST' ) + MODULE_UPLOADS_DEST.agents + '/thumbnails/',
+            {w: 300, h: 300},
+            file.filename,
+        );
+        const thumbnailFilename = await fileResizer.save(fs.readFileSync(file.path));
         const path = this.$configService.get( 'ORIGIN' ) + API_PATH + 'agents/images/' + file.filename;
+        const thumbnailPath = this.$configService.get( 'ORIGIN' ) + API_PATH + 'agents/images/thumbnails/' + thumbnailFilename;
         await this.agentsService.deleteLoginImage( id );
-        return this.agentsService.updateAgent( id, { loginImageUrl: path, loginImageThumbnailUrl: path } );
+        return this.agentsService.updateAgent( id, { loginImageUrl: path, loginImageThumbnailUrl: thumbnailPath } );
     }
 
     @ApiResponse( { status: 204, description: 'Agent login image deleted' } )
@@ -129,9 +138,16 @@ export class AgentsController {
     @Post( ':id/images/logo' )
     @UseInterceptors( FileInterceptor( 'logoImageFile' ) )
     async updateAgentLogoImage( @Param( 'id' ) id: number, @UploadedFile() file, @Req() req ): Promise<AgentViewModel> {
+        const fileResizer = new Resize(
+            this.$configService.get( 'GLOBAL_UPLOADS_DEST' ) + MODULE_UPLOADS_DEST.agents + '/thumbnails/',
+            {w: 300, h: 300},
+            file.filename,
+        );
+        const thumbnailFilename = await fileResizer.save(fs.readFileSync(file.path));
         const path = this.$configService.get( 'ORIGIN' ) + API_PATH + 'agents/images/' + file.filename;
+        const thumbnailPath = this.$configService.get( 'ORIGIN' ) + API_PATH + 'agents/images/thumbnails/' + thumbnailFilename;
         await this.agentsService.deleteLogoImage( id );
-        return this.agentsService.updateAgent( id, { logoImageUrl: path, logoImageThumbnailUrl: path } );
+        return this.agentsService.updateAgent( id, { logoImageUrl: path, logoImageThumbnailUrl: thumbnailPath } );
     }
 
     @ApiResponse( { status: 204, description: 'Agent logo image deleted' } )
@@ -149,7 +165,15 @@ export class AgentsController {
     // @UseGuards(JwtAuthGuard)
     @ApiExcludeEndpoint()
     @Get( 'images/:fileName' )
-    serveFiles( @Param( 'fileName' ) fileName, @Res() res ): Promise<any> {
-        return res.sendFile( fileName, { root: this.$configService.get( 'UPLOADS_DEST' ) + UPLOADS_DEST } );
+    serveImages( @Param( 'fileName' ) fileName, @Res() res ): Promise<any> {
+        return res.sendFile( fileName, { root: this.$configService.get( 'GLOBAL_UPLOADS_DEST' ) + MODULE_UPLOADS_DEST.agents} );
+    }
+
+    // @ApiBearerAuth()
+    // @UseGuards(JwtAuthGuard)
+    @ApiExcludeEndpoint()
+    @Get( 'images/thumbnails/:fileName' )
+    serveThumbnails( @Param( 'fileName' ) fileName, @Res() res ): Promise<any> {
+        return res.sendFile( fileName, { root: this.$configService.get( 'GLOBAL_UPLOADS_DEST' ) + MODULE_UPLOADS_DEST.agents + '/thumbnails'} );
     }
 }
