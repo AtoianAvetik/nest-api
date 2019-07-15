@@ -19,12 +19,12 @@ export class OwnersService {
     }
 
     async getAll(domain: string): Promise<OwnerListModel[]> {
+        const agentData = await this.agentsFindOne({domain});
+        const ownersData = await this.ownersRepository.find({agent: agentData.id});
         const usersData = await this.usersRepository.find();
         const users = usersData.map(user => {
             return new UserModel(user);
         });
-        const agentData = await this.agentsFindOne({domain});
-        const ownersData = await this.ownersRepository.find({agent: agentData.id});
         return Promise.resolve(ownersData.map(ownerData => {
             const owner = new OwnerListModel(ownerData);
             owner.ownerUsers = [];

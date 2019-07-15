@@ -3,8 +3,7 @@ import { Repository, Not, IsNull } from 'typeorm';
 import { AgentUserListModel, AgentUserViewModel } from './agent-user.model';
 import { AgentModel } from '../agents/agent.model';
 import { REPOSITORIES, ROLES } from '../constans';
-import { Agent } from '../agents/agent.entity';
-import { User } from '../users/user.entity';
+import { User, Agent } from '../entities';
 import * as _ from 'lodash';
 import { NotFoundException } from '../_exceptions';
 
@@ -21,8 +20,8 @@ export class AgentUsersService {
         const agentsData = await this.agentsRepository.find();
         return Promise.resolve(usersData.map(userData => {
             const user = new AgentUserListModel(userData);
-            if (user.agent && agentsData.length) {
-                user.agent = new AgentModel(_.find(agentsData, {id: user.agent}));
+            if (userData.agent && agentsData.length) {
+                user.agent = new AgentModel(_.find(agentsData, {id: userData.agent}));
             }
             return user;
         }));
@@ -47,14 +46,12 @@ export class AgentUsersService {
         const userData = await this.usersRepository.save(entity);
         const addedUser = new AgentUserViewModel(userData);
 
-        if (userData.agent) {
-            const agentData = await this.agentsFindOne({id: userData.agent});
-            const agentUsers = agentData.agentUsers || [];
-            agentUsers.push(userData.id);
-            addedUser.agent = new AgentModel(agentData);
+        const agentData = await this.agentsFindOne({id: userData.agent});
+        const agentUsers = agentData.agentUsers || [];
+        agentUsers.push(userData.id);
+        addedUser.agent = new AgentModel(agentData);
+        await this.agentsRepository.update(userData.agent, {agentUsers});
 
-            await this.agentsRepository.update(userData.agent, {agentUsers});
-        }
         return Promise.resolve(addedUser);
     }
 
@@ -66,7 +63,10 @@ export class AgentUsersService {
             const agentData = await this.agentsFindOne({id: userData.agent});
             this.validateDomain(domain, agentData.domain);
         }
-        await this.usersRepository.update({id}, entity);
+        const res = await this.usersRepository.update({id}, entity);
+        if (res.raw.affectedRows === 0) {
+            throw new NotFoundException('User not found');
+        }
         return await this.getById(id);
     }
 

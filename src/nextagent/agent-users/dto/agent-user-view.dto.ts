@@ -1,5 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { Agent1Dto } from '../../agents/dto';
+import { AgentDto } from '../../agents/dto';
 
 export class AgentUserViewDto {
     @ApiModelProperty()
@@ -15,7 +15,7 @@ export class AgentUserViewDto {
     readonly role: string;
 
     @ApiModelProperty()
-    readonly agent: Agent1Dto;
+    readonly agent: AgentDto;
 
     @ApiModelProperty({format: 'date-time'})
     readonly createdAt: string;

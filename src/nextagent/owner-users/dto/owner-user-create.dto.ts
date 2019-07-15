@@ -11,5 +11,5 @@ export class OwnerUserCreateDto {
     readonly isActive: boolean;
 
     @ApiModelProperty()
-    readonly agent: number;
+    readonly owner: number;
 }

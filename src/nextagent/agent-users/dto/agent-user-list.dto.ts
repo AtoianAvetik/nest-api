@@ -1,5 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { Agent1Dto } from '../../agents/dto';
+import { AgentDto } from '../../agents/dto';
 
 export class AgentUserListDto {
     @ApiModelProperty()
@@ -15,5 +15,5 @@ export class AgentUserListDto {
     readonly role: string;
 
     @ApiModelProperty()
-    readonly agent: Agent1Dto;
+    readonly agent: AgentDto;
 }
