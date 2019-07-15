@@ -21,7 +21,7 @@ export class AgentGuard implements CanActivate {
 
         // Only have access the Agent if it is the same Agent as the AgentUser and the X-Agent-Domain
         if (agentData && req.headers['x-agent-domain']) {
-            this.$agentsService.validateDomain(req.headers['x-agent-domain'], agentData.domain);
+            await this.$agentsService.validateDomain(req.headers['x-agent-domain'], agentData.domain);
         }
 
         return !!agentData;

@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserModel } from '../users/user.model';
 import { UsersService } from '../users/users.service';
@@ -58,8 +58,13 @@ export class AuthService {
     }
 
     async validateUser(payload: JwtPayload): Promise<any> {
-        return await this.$usersService.getByEmail(payload.email)
-            .then(signedUser => Promise.resolve(signedUser))
-            .catch(err => Promise.reject(new UnauthorizedException('Invalid Authorization')));
+        return await this.$usersService.getByEmail(payload.email);
+    }
+
+    async validateDomain(agentID, domain): Promise<any> {
+        if ( agentID && domain ) {
+            const agentData = await this.$agentsService.agentsFindOne({id: agentID});
+            return domain === agentData.domain;
+        }
     }
 }

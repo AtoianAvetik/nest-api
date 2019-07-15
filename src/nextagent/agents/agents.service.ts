@@ -46,7 +46,7 @@ export class AgentsService {
         const agent = new AgentViewModel(agentData);
 
         // Only shows the Agent if it is the same Agent as the AgentUser and the X-Agent-Domain
-        this.validateDomain(domain, agentData.domain);
+        await this.validateDomain(domain, agentData.domain);
 
         agent.agentUsers = [];
         agent.agentSuppliers = [];
@@ -77,7 +77,7 @@ export class AgentsService {
         // Can only update Agent if it is the same Agent as the X-Agent-Domain
         if (domain) {
             const agentData = await this.agentsFindOne({id});
-            this.validateDomain(domain, agentData.domain);
+            await this.validateDomain(domain, agentData.domain);
         }
         await this.agentsRepository.update({id}, entity);
         return await this.getById(id);
@@ -93,7 +93,7 @@ export class AgentsService {
     async deleteLoginImage(id: number, domain?: string): Promise<any> {
         const agentData = await this.agentsFindOne({id});
         // Can only delete Agent image if it is the same Agent as the X-Agent-Domain
-        this.validateDomain(domain, agentData.domain);
+        await this.validateDomain(domain, agentData.domain);
 
         const loginImagePath = agentData.loginImageUrl ? (this.$configService.get('GLOBAL_UPLOADS_DEST') + MODULE_UPLOADS_DEST.agents + '/' + agentData.loginImageUrl.split('/').pop()) : '';
         const loginImageThumbnailPath = agentData.loginImageUrl ? (this.$configService.get('GLOBAL_UPLOADS_DEST') + MODULE_UPLOADS_DEST.agents + '/thumbnails/' + agentData.loginImageThumbnailUrl.split('/').pop()) : '';
@@ -105,7 +105,7 @@ export class AgentsService {
     async deleteLogoImage(id: number, domain?: string): Promise<any> {
         const agentData = await this.agentsFindOne({id});
         // Can only delete Agent image if it is the same Agent as the X-Agent-Domain
-        this.validateDomain(domain, agentData.domain);
+        await this.validateDomain(domain, agentData.domain);
 
         const logoImagePath = agentData.logoImageUrl ? (this.$configService.get('GLOBAL_UPLOADS_DEST') + MODULE_UPLOADS_DEST.agents + '/' + agentData.logoImageUrl.split('/').pop()) : '';
         const logoImageThumbnailPath = agentData.logoImageUrl ? (this.$configService.get('GLOBAL_UPLOADS_DEST') + MODULE_UPLOADS_DEST.agents + '/thumbnails/' + agentData.logoImageThumbnailUrl.split('/').pop()) : '';
@@ -114,7 +114,7 @@ export class AgentsService {
         return Promise.resolve();
     }
 
-    public validateDomain(domain, domainCandidate) {
+    async validateDomain(domain, domainCandidate): Promise<any> {
         if (domain && domainCandidate !== domain) {
             throw new BadRequestException({code: HttpStatus.BAD_REQUEST, message: 'You do not have access to this action.'});
         }

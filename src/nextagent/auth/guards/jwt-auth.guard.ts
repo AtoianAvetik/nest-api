@@ -1,5 +1,5 @@
 import {
-    ExecutionContext,
+    ExecutionContext, HttpException,
     Injectable,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -16,6 +16,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     handleRequest(err, user, info) {
         let message;
         if (err) {
+            if ( err.message && err.response && err.status ) {
+                throw new HttpException(err.response, err.status);
+            }
             return (err || new AuthGuardException(info.message));
         } else if (typeof info !== 'undefined' || !user) {
             switch (info.message) {
