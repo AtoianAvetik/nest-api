@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common';
+import { OwnersController } from './owners.controller';
+import { OwnersService } from './owners.service';
 import { nextagentProviders } from '../nextagent.providers';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
 
 @Module({
     controllers: [
-        UsersController,
+        OwnersController,
     ],
     providers: [
         ...nextagentProviders,
-        UsersService,
+        OwnersService,
     ],
     exports: [
-        UsersService,
+        OwnersService,
     ],
 })
-export class UsersModule {
+export class OwnersModule {
 }

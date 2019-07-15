@@ -1,6 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
-export class AgentUser1Dto {
+export class UserListDto {
     @ApiModelProperty()
     readonly id: number;
 
@@ -8,7 +8,7 @@ export class AgentUser1Dto {
     readonly email: string;
 
     @ApiModelProperty()
-    readonly isActive: string;
+    readonly isActive: boolean;
 
     @ApiModelProperty()
     readonly role: string;

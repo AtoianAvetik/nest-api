@@ -60,23 +60,23 @@ export class UsersService {
 
     async deleteUser(id: number): Promise<any> {
         const res = await this.usersRepository.delete({id});
-        if ( res.affected === 0 ) {
-            throw new NotFoundException( 'User not found' );
+        if (res.raw.affectedRows === 0) {
+            throw new NotFoundException('User not found');
         }
     }
 
-    async usersFindOne( condition ): Promise<User> {
-        const userData = await this.usersRepository.findOne( condition );
-        if ( !userData ) {
-            throw new NotFoundException( 'User not found' );
+    async usersFindOne(condition): Promise<User> {
+        const userData = await this.usersRepository.findOne(condition);
+        if (!userData) {
+            throw new NotFoundException('User not found');
         }
         return userData;
     }
 
-    async agentsFindOne( condition ): Promise<Agent> {
-        const agentData = await this.agentsRepository.findOne( condition );
-        if ( !agentData ) {
-            throw new NotFoundException( 'Agent not found' );
+    async agentsFindOne(condition): Promise<Agent> {
+        const agentData = await this.agentsRepository.findOne(condition);
+        if (!agentData) {
+            throw new NotFoundException('Agent not found');
         }
         return agentData;
     }

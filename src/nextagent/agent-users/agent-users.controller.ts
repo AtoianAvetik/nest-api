@@ -12,7 +12,7 @@ import { RolesGuard } from '../_guards/roles.guard';
 @ApiUseTags(TAGS.agentUsers)
 @Controller(API_PATH + 'agent_users')
 export class AgentUsersController {
-    constructor(private readonly agentUsersService: AgentUsersService) {
+    constructor(private readonly $agentUsersService: AgentUsersService) {
     }
 
     @ApiOperation({title: 'Agent users overview', description: 'Accessible through BO with AdminUser'})
@@ -22,7 +22,7 @@ export class AgentUsersController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Get()
     getAll(): Promise<AgentUserListModel[]> {
-        return this.agentUsersService.getAll();
+        return this.$agentUsersService.getAll();
     }
 
     @ApiOperation({title: 'Create new agent user', description: 'Accessible through BO with AdminUser'})
@@ -33,10 +33,11 @@ export class AgentUsersController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Post()
     addAgentUser(@Body() agentUser: AgentUserCreateDto): Promise<AgentUserViewModel> {
-        return this.agentUsersService.addAgentUser(agentUser);
+        return this.$agentUsersService.addAgentUser(agentUser);
     }
 
-    @ApiOperation({title: 'Get single agent user', description: 'Accessible through BO with AdminUser\n' +
+    @ApiOperation({
+        title: 'Get single agent user', description: 'Accessible through BO with AdminUser\n' +
             'Can view every AgentUser\n' +
             '\n' +
             'Accessible through FO with AgentUser\n' +
@@ -48,10 +49,11 @@ export class AgentUsersController {
     @UseGuards(JwtAuthGuard)
     @Get(':id')
     getById(@Param('id') id: number, @Headers('x-agent-domain') domain?: string): Promise<AgentUserViewModel> {
-        return this.agentUsersService.getById(id, domain);
+        return this.$agentUsersService.getById(id, domain);
     }
 
-    @ApiOperation({title: 'Update agent user', description: 'Accessible through BO with AdminUser\n' +
+    @ApiOperation({
+        title: 'Update agent user', description: 'Accessible through BO with AdminUser\n' +
             'Can update every AgentUser\n' +
             '\n' +
             'Accessible through FO with AgentUser\n' +
@@ -64,7 +66,7 @@ export class AgentUsersController {
     @UseGuards(JwtAuthGuard)
     @Put(':id')
     updateAgentUser(@Param('id') id: number, @Body() agentUser: AgentUserUpdateDto, @Headers('x-agent-domain') domain?: string): Promise<AgentUserViewModel> {
-        return this.agentUsersService.updateAgentUser(id, agentUser, domain);
+        return this.$agentUsersService.updateAgentUser(id, agentUser, domain);
     }
 
     @ApiOperation({title: 'Delete agent user', description: 'Accessible through BO with AdminUser'})
@@ -76,7 +78,7 @@ export class AgentUsersController {
     @Delete(':id')
     @HttpCode(204)
     async deleteAgentUser(@Param('id') id: number): Promise<any> {
-        await this.agentUsersService.deleteAgentUser(id);
+        await this.$agentUsersService.deleteAgentUser(id);
         return 'User deleted';
     }
 }

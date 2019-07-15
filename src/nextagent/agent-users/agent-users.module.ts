@@ -12,4 +12,5 @@ import { AgentUsersService } from './agent-users.service';
         AgentUsersService,
     ],
 })
-export class AgentUsersModule {}
+export class AgentUsersModule {
+}

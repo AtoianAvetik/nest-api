@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { nextagentProviders } from '../nextagent.providers';
 import { AgentsService } from './agents.service';
 import { AgentsController } from './agents.controller';
-import { UsersService } from '../users/users.service';
 import { MulterModule } from '@nestjs/platform-express';
 import { MulterConfigService } from '../../_shared/multer-config.service';
 import { ConfigService } from '../../_config/config.service';
@@ -26,10 +25,10 @@ import { MODULE_UPLOADS_DEST } from '../constans';
     providers: [
         ...nextagentProviders,
         AgentsService,
-        UsersService,
     ],
     exports: [
         AgentsService,
     ],
 })
-export class AgentsModule {}
+export class AgentsModule {
+}

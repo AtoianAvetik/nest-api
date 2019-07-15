@@ -1,5 +1,5 @@
 import { Connection } from 'typeorm';
-import { Agent, User } from './entities';
+import { Agent, Owner, User, Supplier } from './entities';
 import { DATABASE_CONNECTION, REPOSITORIES } from './constans';
 
 export const nextagentProviders = [
@@ -11,6 +11,16 @@ export const nextagentProviders = [
     {
         provide: REPOSITORIES.users,
         useFactory: (connection: Connection) => connection.getRepository(User),
+        inject: [DATABASE_CONNECTION],
+    },
+    {
+        provide: REPOSITORIES.owners,
+        useFactory: (connection: Connection) => connection.getRepository(Owner),
+        inject: [DATABASE_CONNECTION],
+    },
+    {
+        provide: REPOSITORIES.suppliers,
+        useFactory: (connection: Connection) => connection.getRepository(Supplier),
         inject: [DATABASE_CONNECTION],
     },
 ];

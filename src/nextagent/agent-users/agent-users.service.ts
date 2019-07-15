@@ -76,7 +76,7 @@ export class AgentUsersService {
         const agentUsers = _.filter(agentData.agentUsers, o => o !== id.toString());
         await this.agentsRepository.update(userData.agent, {agentUsers});
         const res = await this.usersRepository.delete({id});
-        if (res.affected === 0) {
+        if (res.raw.affectedRows === 0) {
             throw new NotFoundException('User not found');
         }
     }

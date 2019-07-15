@@ -1,5 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { AgentUser1Dto } from '../../agent-users/dto';
+import { UserListDto } from '../../users/dto';
 
 export class AgentViewDto {
     @ApiModelProperty()
@@ -29,11 +29,11 @@ export class AgentViewDto {
     @ApiModelProperty({maxLength: 7, minLength: 7, pattern: '#([A-Fa-f0-9]{6}).*'})
     readonly secondaryColor: string;
 
-    @ApiModelProperty({type: AgentUser1Dto, isArray: true})
-    readonly agentUsers: AgentUser1Dto[];
+    @ApiModelProperty({type: UserListDto, isArray: true})
+    readonly agentUsers: UserListDto[];
 
-    @ApiModelProperty({type: AgentUser1Dto, isArray: true})
-    readonly agentSuppliers: AgentUser1Dto[];
+    @ApiModelProperty({type: UserListDto, isArray: true})
+    readonly agentSuppliers: UserListDto[];
 
     @ApiModelProperty({format: 'date-time'})
     readonly createdAt: string;

@@ -11,7 +11,7 @@ import { CryptographerService } from './cryptographer.service';
 
 @Module({
     imports: [
-        PassportModule.register({ defaultStrategy: 'jwt' }),
+        PassportModule.register({defaultStrategy: 'jwt'}),
         JwtModule.registerAsync({
             useFactory: async (configService: ConfigService) => ({
                 secret: configService.get('SESSION_SECRET'),

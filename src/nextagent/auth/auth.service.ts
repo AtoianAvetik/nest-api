@@ -21,10 +21,10 @@ export class AuthService {
     public async login(data: any, fo = false, domain?): Promise<any | { status: number }> {
         const userData = await this.$usersService.getByEmail(data.username);
 
-        if ( fo ) {
-            if ( domain ) {
-                const agentData = await this.$agentsService.agentsFindOne( { domain } );
-                if ( userData.agent !== agentData.id ) {
+        if (fo) {
+            if (domain) {
+                const agentData = await this.$agentsService.agentsFindOne({domain});
+                if (userData.agent !== agentData.id) {
                     throw new BadCredentialsException();
                 }
             } else {
@@ -33,11 +33,11 @@ export class AuthService {
         }
 
         if ((fo && (!userData || userData.role === ROLES.admin)) ||
-            (!fo && (!userData || userData.role !== ROLES.admin)) ) {
+            (!fo && (!userData || userData.role !== ROLES.admin))) {
             throw new BadCredentialsException();
         }
 
-        if ( !this.$cryptoService.checkPassword(userData.plainPassword, data.password) ) {
+        if (!this.$cryptoService.checkPassword(userData.plainPassword, data.password)) {
             throw new BadCredentialsException();
         }
 
@@ -49,7 +49,7 @@ export class AuthService {
     }
 
     async createToken(signedUser: any): Promise<any> {
-        const payload: JwtPayload = { email: signedUser.email };
+        const payload: JwtPayload = {email: signedUser.email};
         const accessToken = this.jwtService.sign(payload);
         return {
             user: new UserModel(signedUser),

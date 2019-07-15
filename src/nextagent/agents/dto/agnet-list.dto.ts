@@ -1,5 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { AgentUser1Dto } from '../../agent-users/dto';
+import { UserListDto } from '../../users/dto';
 
 export class AgentListDto {
     @ApiModelProperty()
@@ -11,6 +11,6 @@ export class AgentListDto {
     @ApiModelProperty({maxLength: 100, minLength: 6})
     readonly domain: string;
 
-    @ApiModelProperty({type: AgentUser1Dto, isArray: true})
-    readonly agentUsers: AgentUser1Dto[];
+    @ApiModelProperty({type: UserListDto, isArray: true})
+    readonly agentUsers: UserListDto[];
 }

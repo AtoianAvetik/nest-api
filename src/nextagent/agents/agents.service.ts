@@ -85,7 +85,7 @@ export class AgentsService {
 
     async deleteAgent(id: number): Promise<any> {
         const res = await this.agentsRepository.delete({id});
-        if (res.affected === 0) {
+        if (res.raw.affectedRows === 0) {
             throw new NotFoundException('Agent not found');
         }
     }
