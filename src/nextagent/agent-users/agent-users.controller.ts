@@ -1,8 +1,9 @@
 import { Body, Controller, Delete, Get, Headers, HttpCode, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { AgentUsersService } from './agent-users.service';
 import { ApiUseTags, ApiResponse, ApiOperation, ApiBearerAuth, ApiImplicitHeader } from '@nestjs/swagger';
-import { AgentUserCreateDto, AgentUserListDto, AgentUserUpdateDto, AgentUserViewDto } from './dto';
+import { AgentUserCreateDto, AgentUserListDto, AgentUserViewDto } from './dto';
 import { ValidationErrorDto } from '../_dto';
+import { UserUpdateDto } from '../users/dto';
 import { AgentUserListModel, AgentUserViewModel } from './agent-user.model';
 import { TAGS, API_PATH, ROLES } from '../constans';
 import { Roles } from '../_decorators';
@@ -43,7 +44,7 @@ export class AgentUsersController {
             'Accessible through FO with AgentUser\n' +
             'Only shows the AgentUser if it is the same as the logged in AgentUser'})
     @ApiImplicitHeader({name: 'x-agent-domain', required: false})
-    @ApiResponse({status: 200, description: 'Returns single agent user data', type: [AgentUserViewDto]})
+    @ApiResponse({status: 200, description: 'Returns single agent user data', type: AgentUserViewDto})
     @ApiResponse({status: 404, description: 'User not found'})
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
@@ -65,7 +66,7 @@ export class AgentUsersController {
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Put(':id')
-    updateAgentUser(@Param('id') id: number, @Body() agentUser: AgentUserUpdateDto, @Headers('x-agent-domain') domain?: string): Promise<AgentUserViewModel> {
+    updateAgentUser(@Param('id') id: number, @Body() agentUser: UserUpdateDto, @Headers('x-agent-domain') domain?: string): Promise<AgentUserViewModel> {
         return this.$agentUsersService.updateAgentUser(id, agentUser, domain);
     }
 

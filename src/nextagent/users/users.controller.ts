@@ -22,10 +22,8 @@ export class UsersController {
         return this.usersService.getCurrent(domain);
     }
 
-    @ApiOperation({
-        title: 'Get user by email', description: 'Accessible for every logged in User\n' +
-            'Only returns the email if it exists'
-    })
+    @ApiOperation({title: 'Get user by email', description: 'Accessible for every logged in User\n' +
+            'Only returns the email if it exists'})
     @ApiImplicitHeader({name: 'x-agent-domain', required: false})
     @ApiResponse({status: 200, description: 'Returns email of the user if it exists', type: UserEmailDto})
     @ApiBearerAuth()

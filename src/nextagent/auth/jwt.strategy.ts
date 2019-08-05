@@ -22,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         if (!user) {
             throw new UnauthorizedException('User not found');
         }
-        if (!validated) {
+        if (req.headers['x-agent-domain'] && !validated) {
             throw new BadRequestException({code: HttpStatus.BAD_REQUEST, message: 'You do not have access to this action.'});
         }
         return done(null, user);

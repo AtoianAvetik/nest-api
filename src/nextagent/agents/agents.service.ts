@@ -2,35 +2,39 @@ import { BadRequestException, HttpStatus, Inject, Injectable } from '@nestjs/com
 import { Repository } from 'typeorm';
 import { Agent } from './agent.entity';
 import { REPOSITORIES, MODULE_UPLOADS_DEST } from '../constans';
-import { AgentDomainModel, AgentListModel, AgentViewModel } from './agent.model';
+import { AgentDomainModel, AgentListModel, AgentSupplierModel, AgentViewModel } from './agent.model';
 import { ConfigService } from '../../_config/config.service';
 import { NotFoundException } from '../_exceptions';
 import * as _ from 'lodash';
 import * as fs from 'fs';
 import { User } from '../users/user.entity';
 import { UserModel } from '../users/user.model';
+import { AgentSupplier } from '../agent-suppliers/agent-supplier.entity';
+import { UsersService } from '../users/users.service';
+import { AgentSuppliersService } from '../agent-suppliers/agent-suppliers.service';
 
 @Injectable()
 export class AgentsService {
     constructor(@Inject(REPOSITORIES.agents)
                 private readonly agentsRepository: Repository<Agent>,
+                @Inject(REPOSITORIES.agentSuppliers)
+                private readonly agentSuppliersRepository: Repository<AgentSupplier>,
                 @Inject(REPOSITORIES.users)
                 private readonly usersRepository: Repository<User>,
+                private $usersService: UsersService,
+                private $agentSuppliersService: AgentSuppliersService,
                 private $configService: ConfigService) {
     }
 
     async getAll(): Promise<AgentListModel[]> {
         const usersData = await this.usersRepository.find();
-        const users = usersData.map(user => {
-            return new UserModel(user);
-        });
         const agentsData = await this.agentsRepository.find();
         return Promise.resolve(agentsData.map(agentData => {
             const agent = new AgentListModel(agentData);
             agent.agentUsers = [];
             if (agentData.agentUsers && agentData.agentUsers.length > 0) {
                 agentData.agentUsers.forEach(userId => {
-                    agent.agentUsers.push(_.find(users, {id: Number(userId)}));
+                    agent.agentUsers.push(new UserModel(_.find(usersData, {id: Number(userId)})));
                 });
             }
             return agent;
@@ -39,9 +43,7 @@ export class AgentsService {
 
     async getById(id: number, domain?: string): Promise<AgentViewModel> {
         const usersData = await this.usersRepository.find();
-        const users = usersData.map(user => {
-            return new UserModel(user);
-        });
+        const agentSuppliersData = await this.agentSuppliersRepository.find();
         const agentData = await this.agentsFindOne({id});
         const agent = new AgentViewModel(agentData);
 
@@ -49,11 +51,16 @@ export class AgentsService {
         await this.validateDomain(domain, agentData.domain);
 
         agent.agentUsers = [];
-        agent.agentSuppliers = [];
         if (agentData.agentUsers && agentData.agentUsers.length > 0) {
             agentData.agentUsers.forEach(userId => {
-                agent.agentUsers.push(_.find(users, {id: Number(userId)}));
-                agent.agentSuppliers.push(_.find(users, {id: Number(userId)}));
+                agent.agentUsers.push(new UserModel(_.find(usersData, {id: Number(userId)})));
+            });
+        }
+
+        agent.agentSuppliers = [];
+        if (agentData.agentSuppliers && agentData.agentSuppliers.length > 0) {
+            agentData.agentSuppliers.forEach(agentSupplierId => {
+                agent.agentSuppliers.push(new AgentSupplierModel(_.find(agentSuppliersData, {id: Number(agentSupplierId)})));
             });
         }
         return Promise.resolve(agent);
@@ -84,6 +91,23 @@ export class AgentsService {
     }
 
     async deleteAgent(id: number): Promise<any> {
+        const agentData = await this.agentsFindOne({id});
+        console.log(agentData);
+        if ( agentData.agentUsers && agentData.agentUsers.length ) {
+            await agentData.agentUsers.forEach(async userId => {
+                await this.$usersService.deleteUser(userId);
+            });
+        }
+        console.log(1);
+
+        if ( agentData.agentSuppliers && agentData.agentSuppliers.length ) {
+            await agentData.agentSuppliers.forEach(async agentSupplierId => {
+                console.log(2);
+                await this.$agentSuppliersService.deleteAgentSupplierRelation(agentSupplierId);
+            });
+        }
+
+        console.log(4);
         const res = await this.agentsRepository.delete({id});
         if (res.raw.affectedRows === 0) {
             throw new NotFoundException('Agent not found');

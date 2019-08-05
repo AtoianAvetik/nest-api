@@ -1,4 +1,25 @@
 import { UserModel } from '../users/user.model';
+import { SupplierModel } from '../suppliers/supplier.model';
+
+export class AgentSupplierModel {
+    id: number;
+    supplier: SupplierModel;
+
+    constructor(data) {
+        this.id = data.id;
+        this.supplier = data.supplier;
+    }
+}
+
+export class Agent1Model {
+    id: number;
+    companyName: string;
+
+    constructor(data) {
+        this.id = data.id;
+        this.companyName = data.companyName;
+    }
+}
 
 export class AgentModel {
     id: number;
@@ -50,7 +71,7 @@ export class AgentViewModel extends AgentListModel {
     logoImageThumbnailUrl: string;
     primaryColor: string;
     secondaryColor: string;
-    agentSuppliers: UserModel[];
+    agentSuppliers: AgentSupplierModel[];
     createdAt: Date;
 
     constructor(data) {

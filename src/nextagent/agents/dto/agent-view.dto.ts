@@ -1,5 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { UserListDto } from '../../users/dto';
+import { AgentSupplierDto } from './agent-supplier.dto';
 
 export class AgentViewDto {
     @ApiModelProperty()
@@ -32,8 +33,8 @@ export class AgentViewDto {
     @ApiModelProperty({type: UserListDto, isArray: true})
     readonly agentUsers: UserListDto[];
 
-    @ApiModelProperty({type: UserListDto, isArray: true})
-    readonly agentSuppliers: UserListDto[];
+    @ApiModelProperty({type: AgentSupplierDto, isArray: true})
+    readonly agentSuppliers: AgentSupplierDto[];
 
     @ApiModelProperty({format: 'date-time'})
     readonly createdAt: string;

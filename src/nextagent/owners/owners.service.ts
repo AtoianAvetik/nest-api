@@ -6,6 +6,7 @@ import { Owner } from './owner.entity';
 import { Agent, User } from '../entities';
 import { NotFoundException } from '../_exceptions';
 import { UserModel } from '../users/user.model';
+import { UsersService } from '../users/users.service';
 import * as _ from 'lodash';
 
 @Injectable()
@@ -15,7 +16,8 @@ export class OwnersService {
                 @Inject(REPOSITORIES.agents)
                 private readonly agentsRepository: Repository<Agent>,
                 @Inject(REPOSITORIES.users)
-                private readonly usersRepository: Repository<User>) {
+                private readonly usersRepository: Repository<User>,
+                private readonly $usersService: UsersService) {
     }
 
     async getAll(domain: string): Promise<OwnerListModel[]> {
@@ -73,6 +75,14 @@ export class OwnersService {
 
     async deleteOwner(id, domain: string): Promise<any> {
         const agentData = await this.agentsFindOne({domain});
+        const ownerData = await this.ownersFindOne({id, agent: agentData.id});
+
+        if ( ownerData.ownerUsers && ownerData.ownerUsers.length ) {
+            await ownerData.ownerUsers.forEach(async userId => {
+                await this.$usersService.deleteUser(userId);
+            });
+        }
+
         const res = await this.ownersRepository.delete({id, agent: agentData.id});
         if (res.raw.affectedRows === 0) {
             throw new NotFoundException('Owner not found');

@@ -2,12 +2,13 @@ import { Body, Controller, Delete, Get, Headers, HttpCode, Param, Post, Put, Use
 import { API_PATH, ROLES, TAGS } from '../constans';
 import { ApiUseTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { OwnerUsersService } from './owner-users.service';
-import { OwnerUserCreateDto, OwnerUserListDto, OwnerUserUpdateDto, OwnerUserViewDto } from './dto';
+import { OwnerUserCreateDto, OwnerUserListDto, OwnerUserViewDto } from './dto';
 import { Roles } from '../_decorators';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../_guards/roles.guard';
 import { OwnerUserListModel, OwnerUserViewModel } from './owner-user.model';
 import { ValidationErrorDto } from '../_dto';
+import { UserUpdateDto } from '../users/dto';
 
 @ApiUseTags(TAGS.ownerUsers)
 @Controller(API_PATH + 'owner_users')
@@ -61,7 +62,7 @@ export class OwnerUsersController {
     @Roles(ROLES.agent)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Put(':id')
-    updateOwnerUser(@Headers('x-agent-domain') domain: string, @Param('id') id: number, @Body() ownerUser: OwnerUserUpdateDto): Promise<OwnerUserViewModel> {
+    updateOwnerUser(@Headers('x-agent-domain') domain: string, @Param('id') id: number, @Body() ownerUser: UserUpdateDto): Promise<OwnerUserViewModel> {
         return this.$ownerUsersService.updateOwnerUser(id, ownerUser, domain);
     }
 

@@ -1,6 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
-export class AgentUserUpdateDto {
+export class UserUpdateDto {
     @ApiModelProperty({description: 'Min 6 characters long. Max 128 characters long. Must be a valid email address. Needs to be unique.'})
     readonly email: string;
 

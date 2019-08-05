@@ -64,7 +64,7 @@ export class AuthService {
     async validateDomain(agentID, domain): Promise<any> {
         if ( agentID && domain ) {
             const agentData = await this.$agentsService.agentsFindOne({id: agentID});
-            return domain === agentData.domain;
+            return agentData && domain === agentData.domain;
         }
     }
 }
